@@ -1,0 +1,13 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.user-form {
+    display: flex;
+    background-color: #e28a8a;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0px 0px;
+    padding: 10px;
+}
