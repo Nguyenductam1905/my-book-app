@@ -1,9 +1,9 @@
 import Input from "antd/es/input/Input"
 import Password from "antd/es/input/Password"
 import "./user.css"
-import { Button, Descriptions, Form, message, notification, Modal } from "antd"
+import { Button, Descriptions, Form, notification, Modal } from "antd"
 import { useState } from "react"
-import axios from "axios"
+// import axios from "axios"
 import { createUserAPI } from "../../services/axios.service"
 
 

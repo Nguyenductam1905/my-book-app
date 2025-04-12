@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input, notification, Modal } from "antd";
-// import { updateUserAPI } from "./axios.service";
+import { updateUserAPI } from "./axios.service";
 
 const UpdateUserModal = (props) => {
     const [id, setId] = useState("");
