@@ -7,21 +7,13 @@ import axios from "axios"
 import { createUserAPI } from "../../services/axios.service"
 
 
-const UserForm = () => {
+const UserForm = (props) => {
+    const {loadUser} = props
     const [fullName, setFullName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [phone, setPhone] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    // const handleOk = () => {
-    //     setIsModalOpen(false);
-    // };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
 
     const handleSubmitBtn = async () => {
         // alert("Clicked")
@@ -33,6 +25,8 @@ const UserForm = () => {
                     description: "Tạo user thành công",
                 }
             )
+            resetAndCloseModal()
+            await loadUser()
         }
         else {
             notification.error(
@@ -44,17 +38,25 @@ const UserForm = () => {
         }
     }
 
+    const resetAndCloseModal = () => {
+        setIsModalOpen(false);
+        setFullName("");
+        setEmail("");
+        setPassword("");
+        setPhone("");
+    }
+
     return (
         <div className="user-form">
             <div style={{ display: "flex", justifyContent: "space-between"}}>
                 <h3>Table Users</h3>
-                <Button type="primary" onClick={() => showModal()}>Create</Button>
+                <Button type="primary" onClick={() => setIsModalOpen(true)}>Create</Button>
             </div>
             <Modal
                 title="Create User"
                 open={isModalOpen}
                 onOk={handleSubmitBtn}
-                onCancel={handleCancel}
+                onCancel={resetAndCloseModal}
                 okText={"CREATE"}
             >
                 <Form style={{display:"flex", gap: "10px", flexDirection: "column"}}>
