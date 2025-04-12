@@ -9,7 +9,6 @@ const UserPages = () => {
     const [dataUsers, setDataUsers] = useState([])
     //empty array
     useEffect(()=>{
-        console.log("Run useEffect 111")
         loadUser()
     },[])
 
@@ -20,7 +19,7 @@ const UserPages = () => {
 
     return(
         <div style={{padding: "20px"}}>
-            <UserForm 
+            <UserForm
                 loadUser = {loadUser}
             />
             <UserTable

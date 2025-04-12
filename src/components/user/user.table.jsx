@@ -1,14 +1,29 @@
 import { Space, Table, Tag } from 'antd';
 import { fetchAllUserAPI } from '../../services/axios.service';
-
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import UpdateUserModal from '../../services/update.user.modal';
+import { useState } from 'react';
 
 const UserTable = (props) => {
 
-    const {dataUsers} = props
+    const {dataUsers, loadUser} = props
+
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+
+    const [dataUpdate, setDataUpdate] = useState(null);
+
+    const [dataDetail, setDataDetail] = useState(null);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+
     const columns = [
         {
             title: "ID",
             dataIndex: '_id',
+            render: (_, record) => {
+                return (
+                    <a href='#'>{record._id}</a>
+                )
+            }
         },
         {
             title: 'Full Name',
@@ -18,10 +33,40 @@ const UserTable = (props) => {
             title: 'Email',
             dataIndex: 'email',
         },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+              <div style={{display: "flex", gap: "10px"}}>
+                <a><EditOutlined
+                    style={{cursor: "pointer", color: "orange"}}
+                    onClick={() => {
+                        setDataUpdate(record);
+                        setIsModalUpdateOpen(true);
+                    }}
+                /> {record.name}</a>
+                <a><DeleteOutlined style={{cursor: "pointer", color: "red"}}/></a>
+              </div>
+            ),
+        },
     ];
 
     return (
-        <Table columns={columns} dataSource={dataUsers} rowKey={"_id"}/>
+        <>
+            <Table
+                columns={columns}
+                dataSource={dataUsers}
+                rowKey={"_id"}
+            />
+            <UpdateUserModal
+                    isModalUpdateOpen={isModalUpdateOpen}
+                    setIsModalUpdateOpen={setIsModalUpdateOpen}
+                    dataUpdate={dataUpdate}
+                    setDataUpdate={setDataUpdate}
+                    loadUser={loadUser}
+            />
+        </>
+        
     )
 }
 
