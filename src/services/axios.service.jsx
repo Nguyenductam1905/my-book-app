@@ -10,10 +10,6 @@ const createUserAPI = (fullName, email, password, phone) => {
     }
     return axios.post(URL_BACKEND, data)
 }
-const fetchAllUserAPI = () => {
-    const URL_BACKEND = "/api/v1/user";
-    return axios.get(URL_BACKEND)
-}
 const updateUserAPI = (_id, fullName, phone) => {
     const URL_BACKEND = "/api/v1/user";
     const data = {
@@ -25,14 +21,14 @@ const updateUserAPI = (_id, fullName, phone) => {
 }
 
 const updateUserAvatarAPI = (avatar, _id, fullName, phone) => {
-    const URL_BACKEND = "/api/v1/file/upload";
+    const URL_BACKEND = "/api/v1/user";
     const newData = {
         _id: _id,
         avatar: avatar,
         fullName: fullName,
         phone: phone
     }
-    return axios.post(URL_BACKEND, newData);
+    return axios.put(URL_BACKEND, newData);
 }
 
 // const handleUploadFile = (file, folder) => {
@@ -71,4 +67,12 @@ const deleteUserAPI = (id) => {
     const URL_BACKEND = `/api/v1/user/${id}`;
     return axios.delete(URL_BACKEND)
 }
-export {createUserAPI, updateUserAPI, fetchAllUserAPI, deleteUserAPI, handleUploadFile, updateUserAvatarAPI}
+
+
+const fetchAllUserAPI = (current, pageSize) => {
+    const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
+    return axios.get(URL_BACKEND)
+}
+
+export {createUserAPI, updateUserAPI, fetchAllUserAPI,
+     deleteUserAPI, handleUploadFile, updateUserAvatarAPI}

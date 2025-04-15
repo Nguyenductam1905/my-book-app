@@ -8,12 +8,11 @@ const ViewUserDetail = (props) => {
         setDataDetail,
         isDetailOpen,
         setIsDetailOpen,
-        loadUser
+        loadUser,
     } = props;
     const [selectedFile, setSelectedFile] = useState(null)
     const [preview, setPreview] = useState(null)
-    console.log(">>> check props: ", props);
-    
+
     const handleOnchangeFile = (event) => {
         if (!event.target.files || event.target.files.length === 0) {
             setSelectedFile(null)
@@ -21,53 +20,48 @@ const ViewUserDetail = (props) => {
             return;
         }
         const file = event.target.files[0]
-        // setSelectedFile(file)
-        console.log(">>> check file: ", file);
+        // console.log(">>> check file: ", file);
         if (file) {
             setSelectedFile(file)
             setPreview(URL.createObjectURL(file))
         }
-        console.log(">>> check fileasd: ", preview);
     }
+    console.log(">>> check preview: ", preview);
 
     const handleUpdateUserAvatar = async () => {
         const resUpload = await handleUploadFile(selectedFile, "avatar");
-        console.log(">>> check resUpload: ", resUpload.data);
-        if (resUpload.data) {
-            // step 1: upload file
+        console.log(">>> check resUpload: ", resUpload);
+        if (resUpload.data || resUpload.status < 400) {
+            //
             const newAvatar = resUpload.data.fileUploaded;
-            // step 2: update user
-            const resUpdate = await updateUserAvatarAPI(
-                newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone);
-            console.log(">>> check resUpdate: ", resUpdate.data);
-            if (resUpdate.data) {
+            const resUpdateAvatar = await updateUserAvatarAPI(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone);
+            if (resUpdateAvatar.data) {
                 setIsDetailOpen(false);
                 setSelectedFile(null);
                 setPreview(null);
                 await loadUser();
                 notification.success({
-                    message: "Upload avatar successful",
-                    description: "Tải ảnh đại diện thành công"
+                    message: "Upload user avatar",
+                    description: "Upload avatar thành công",
                 })
-            }
-            else {
+            } else {
                 notification.error({
-                    message: "Error upload file",
-                    description: JSON.stringify(resUpdate.message)
+                    message: "Failed update avatar",
+                    description: JSON.stringify(resUpdateAvatar.message),
                 })
-                return;
             }
-        }
-        else {
+        } else {
             notification.error({
-                message: "Error upload file",
-                description: JSON.stringify(resUpload.message)
+                message: "Upload file failed",
+                description: JSON.stringify(resUpload.message),
             })
+            return;
         }
     }
-
     return (
-        <Drawer title="Chi tiết User"
+        <Drawer
+            width={"40vw"}
+            title="Chi tiết User"
             onClose={() => {
                 setDataDetail(null);
                 setIsDetailOpen(false);
@@ -119,10 +113,10 @@ const ViewUserDetail = (props) => {
                                 border: "1px solid #ccc"
                             }} >
                             <img style={{ height: "100%", width: "100%", objectFit: "contain" }}
-                                src={preview} alt="" />
+                                src={preview} />
                         </div>
                         <Button type='primary'
-                            onClick={() => handleUpdateUserAvatar()}
+                            onClick={(event) => handleUpdateUserAvatar(event)}
                         >Save</Button>
                     </>
                 }
